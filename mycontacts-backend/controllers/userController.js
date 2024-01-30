@@ -13,11 +13,18 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error("All fields are mandatory!");
     }
 
-    // Already registered user 
+    // Already registered user - email already taken
     const userAvailable = await User.findOne({email});
     if (userAvailable){
         res.status(400);
-        throw new Error("User already registered");
+        throw new Error("Email already registered");
+    }
+
+    // Already registered user - username already taken
+    const userNameAvailable = await User.findOne({username});
+    if (userNameAvailable){
+        res.status(400);
+        throw new Error("Username already taken");
     }
 
     // Hash Password 
