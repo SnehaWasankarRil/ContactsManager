@@ -28,6 +28,12 @@ const getContact = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("Contact not found");
     }
+    // const contact = await Contact.find({user_id: req.params.id});
+    const userAuthenticationCheck = await Contact.findOne({ _id: req.params.id, user_id: req.user.id });
+    if(!userAuthenticationCheck){
+        res.status(403);
+        throw new Error("User is not authenticated to view this contact");
+    }
     res.status(200).json(contact);
 });
 
